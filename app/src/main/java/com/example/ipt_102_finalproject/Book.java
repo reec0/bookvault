@@ -1,19 +1,22 @@
 package com.example.ipt_102_finalproject;
-
 public class Book {
-    private String id;
+    private String bookId;
     private String title;
     private String author;
-    private String description;
-    private String publicationYear;
     private String year;
-
     private String coverUrl;
-    public Book(String title, String author, String year, String coverUrl) {
+
+    public Book(String bookId, String title, String author, String year, String coverUrl) {
+        this.bookId = bookId;
         this.title = title;
         this.author = author;
         this.year = year;
         this.coverUrl = coverUrl;
+    }
+
+    // Getters and setters
+    public String getBookId() {
+        return bookId;
     }
 
     public String getTitle() {
@@ -31,3 +34,4 @@ public class Book {
     public String getCoverUrl() {
         return coverUrl;
     }
+}

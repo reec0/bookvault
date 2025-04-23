@@ -1,7 +1,22 @@
 package com.example.ipt_102_finalproject;
 
-import android.content.Context; import androidx.lifecycle.LiveData; import androidx.lifecycle.MutableLiveData; import androidx.lifecycle.ViewModel; import com.android.volley.Request; import com.android.volley.RequestQueue; import com.android.volley.toolbox.JsonObjectRequest; import com.android.volley.toolbox.Volley; import org.json.JSONArray; import org.json.JSONException; import org.json.JSONObject; import java.util.ArrayList; import java.util.List;
+import android.content.Context;
+import android.content.SharedPreferences;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 public class BookViewModel extends ViewModel {
     private MutableLiveData<List<Book>> books = new MutableLiveData<>();
 
@@ -24,18 +39,24 @@ public class BookViewModel extends ViewModel {
                             String author = obj.has("author_name") ? obj.getJSONArray("author_name").getString(0) : "Unknown";
                             String year = obj.has("first_publish_year") ? String.valueOf(obj.getInt("first_publish_year")) : "N/A";
 
+                            // Fetching cover image from cover_i
                             String coverUrl = "";
                             if (obj.has("cover_i")) {
                                 int coverId = obj.getInt("cover_i");
-                                coverUrl = "https://covers.openlibrary.org/b/id/" + coverId + "-L.jpg";
+                                coverUrl = "https://covers.openlibrary.org/b/id/" + coverId + "-L.jpg"; // Use the cover_i-based URL
                             }
 
-                            bookList.add(new Book(title, author, year, coverUrl));
+                            // Get the Open Library 'key' as the unique identifier for the book
+                            String bookId = obj.optString("key", "");
+
+                            // Create a Book object with the bookId
+                            bookList.add(new Book(bookId, title, author, year, coverUrl));
                         }
 
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+
                     books.setValue(bookList);
                 },
                 error -> error.printStackTrace());

@@ -6,7 +6,7 @@ import android.os.Bundle; import android.widget.Button; import android.widget.Ed
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity; import androidx.lifecycle.ViewModelProvider; import androidx.recyclerview.widget.LinearLayoutManager; import androidx.recyclerview.widget.RecyclerView; import java.util.ArrayList;
-public class MainActivity extends AppCompatActivity {
+public class DashboardActivity extends AppCompatActivity {
     private BookViewModel bookViewModel;
     private BookAdapter bookAdapter;
     private TextView textViewUserEmail;
@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_dashboard);
 
         EditText editTextSearch = findViewById(R.id.editTextSearch);
         Button buttonSearch = findViewById(R.id.buttonSearch);
@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         buttonLogout = findViewById(R.id.buttonLogout);
         RecyclerView recyclerView = findViewById(R.id.recyclerViewBooks);
 
-        SharedPreferences prefs = MainActivity.this.getSharedPreferences("user_data", Context.MODE_PRIVATE);
+        SharedPreferences prefs = DashboardActivity.this.getSharedPreferences("user_data", Context.MODE_PRIVATE);
         String usersEmail = prefs.getString("user_email", null);
         textViewUserEmail.setText(usersEmail);
 
@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         buttonGoToFavorites.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, FavoriteBooksActivity.class);
+            Intent intent = new Intent(DashboardActivity.this, FavoriteBooksActivity.class);
             startActivity(intent);
         });
 
@@ -52,8 +52,14 @@ public class MainActivity extends AppCompatActivity {
             editor.remove("user_id");
             editor.remove("user_email");  // Remove the email or any other key you want to clear
             editor.apply();
-            Intent intent = new Intent(MainActivity.this, Login.class);
+            Intent intent = new Intent(DashboardActivity.this, LandingScreen.class);
             startActivity(intent);
         });
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Re-fetch using the last query (defaults to empty string if none)
+        bookViewModel.fetchBooks(this, bookViewModel.getLastQuery());
     }
 }

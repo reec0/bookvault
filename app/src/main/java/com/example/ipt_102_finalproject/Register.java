@@ -26,6 +26,7 @@ public class Register extends AppCompatActivity {
     EditText editTextEmail, editTextPassword;
     Button registerButton;
     String registerUrl = "http://10.0.2.2/book_vault/register.php"; // make sure this is the correct reachable URL
+//  String registerUrl = "https://bookvault.kesug.com/book_vault/register.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

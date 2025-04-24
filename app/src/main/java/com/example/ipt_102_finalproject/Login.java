@@ -27,6 +27,8 @@ public class Login extends AppCompatActivity {
     EditText editTextEmail, editTextPassword;
     Button loginButton;
     String loginUrl = "http://10.0.2.2/book_vault/login.php"; // Emulator local API endpoint
+//  String loginUrl = "https://bookvault.kesug.com/book_vault/login.php";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +77,7 @@ public class Login extends AppCompatActivity {
 
                                 Toast.makeText(this, "Login successful!", Toast.LENGTH_SHORT).show();
 
-                                Intent intent = new Intent(this, MainActivity.class);
+                                Intent intent = new Intent(this, DashboardActivity.class);
                                 startActivity(intent);
                                 finish();
                             } else {

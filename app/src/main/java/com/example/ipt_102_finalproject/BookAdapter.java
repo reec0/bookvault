@@ -101,6 +101,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
 
     private void addToFavorites(Context context, Book book) {
         String url = "http://10.0.2.2/book_vault/add_favorite_books.php";
+//        String url =  "https:bookvault.kesug.com/book_vault/add_favorite_books.php";
 
         // Retrieve user_id from SharedPreferences
         SharedPreferences prefs = context.getSharedPreferences("user_data", Context.MODE_PRIVATE);
@@ -123,6 +124,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
+                params.put("book_id", book.getBookId()); // Include user_id
                 params.put("user_id", userId); // Include user_id
                 params.put("title", book.getTitle());
                 params.put("author", book.getAuthor());
@@ -173,6 +175,8 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
     // Method to check if the book is already in favorites
     private void checkFavoriteStatus(BookViewHolder holder, Book book, String userId) {
         String url = "http://10.0.2.2/book_vault/check_favorite_status.php";
+//      String url =  https://bookvault.kesug.com/book_vault/check_favorite_status.php
+
 
         StringRequest request = new StringRequest(Request.Method.POST, url,
                 response -> {
@@ -190,7 +194,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
                 params.put("user_id", userId);
-                params.put("book_id", String.valueOf(book.getBookId())); // Book ID to check
+                params.put("book_id", book.getBookId()); // Book ID to check
                 return params;
             }
         };

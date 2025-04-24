@@ -19,12 +19,19 @@ import java.util.ArrayList;
 import java.util.List;
 public class BookViewModel extends ViewModel {
     private MutableLiveData<List<Book>> books = new MutableLiveData<>();
+    private String lastQuery = ""; // <- add this to remember the last search
 
     public LiveData<List<Book>> getBooks() {
         return books;
     }
 
+    public String getLastQuery() {
+        return lastQuery;
+    }
+
     public void fetchBooks(Context context, String query) {
+        lastQuery = query; // <- save the last search query
+
         String url = "https://openlibrary.org/search.json?q=" + query.replace(" ", "+");
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -39,17 +46,13 @@ public class BookViewModel extends ViewModel {
                             String author = obj.has("author_name") ? obj.getJSONArray("author_name").getString(0) : "Unknown";
                             String year = obj.has("first_publish_year") ? String.valueOf(obj.getInt("first_publish_year")) : "N/A";
 
-                            // Fetching cover image from cover_i
                             String coverUrl = "";
                             if (obj.has("cover_i")) {
                                 int coverId = obj.getInt("cover_i");
-                                coverUrl = "https://covers.openlibrary.org/b/id/" + coverId + "-L.jpg"; // Use the cover_i-based URL
+                                coverUrl = "https://covers.openlibrary.org/b/id/" + coverId + "-L.jpg";
                             }
 
-                            // Get the Open Library 'key' as the unique identifier for the book
                             String bookId = obj.optString("key", "");
-
-                            // Create a Book object with the bookId
                             bookList.add(new Book(bookId, title, author, year, coverUrl));
                         }
 
